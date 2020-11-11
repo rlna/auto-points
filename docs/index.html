@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+		<link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<header>
+			<div class="content">
+				<h2>CS 194</h2>
+			</div>
+		</header>
+
+		<div id="image-banner"></div>
+
+		<div class="content">
+			<section id="post">
+				<h1>Project 4: Face Keypoint Detection with Neural Networks</h1>
+				<div class="d"></div>
+				<h3>Fall 2020</h3>
+				<h2>Overview</h2>
+				<p>
+					In this project, I explored how to use neural networks to automatically detect facial keypoints. I specifically used a convolutional neural network (CNN), a deep learning model often applied to images. Convolutional neural networks use convolutional layers to extract features from an image, to eventually feed into a fully connected layer. By filtering the inputs at each convolutional layer, a CNN makes image processing much more feasible.
+				</p>
+
+				</section>
+				<h2 >Part 1: Nose Tip Detection</h2>
+				<p>
+					First, I trained a simple CNN to detect a single point. I used images and keypoints from the <a href="http://www2.imm.dtu.dk/~aam/datasets/datasets.html">IMM database</a>, and trained the CNN to detect the nose tip keypoints. I processed the images and keypoints by defining my own dataset, which I fed to a dataloader with batch size 18. The following images are examples of the dataloader's output. The red dot marks the ground-truth keypoints.
+				</p>
+				<figcaption align="middle">Dataset points.</figcaption>
+				<div class="four">
+							<section id="nose">
+								<img src="images/nose/nose1.png" height="150px" />
+							</section>
+							<section id="nose">
+								<img src="images/nose/nose2.png" height="150px" />
+							</section>
+							<section id="nose">
+								<img src="images/nose/nose3.png" height="150px" />
+							</section>
+							<section id="nose">
+								<img src="images/nose/nose4.png" height="150px" />
+							</section>
+				</div>
+				<div class="d"></div>
+				<p>
+					I defined my model with the hyperparameters displayed below. I trained with a learning rate of 1e-3 and used torch.optim.Adam, on images rescaled to 120x180. I ran it for 25 epochs.
+				</p>
+				<section align="middle">
+					<img src="images/1/nn.png" width="600px" />
+				</section>
+				<p>
+					The graph below shows the training loss and validation loss for each epoch. The loss is the difference between the target keypoint and output keypoint that the model uses to learn. The training loss is in red, and the validation loss is in blue.
+				</p>
+				<section align="middle">
+					<img src="images/1/g.png" height="250px" />
+				</section>
+				<p>
+					After training the network, I ran the images and keypoints I originally set aside to test it. I got a mix of fairly accurate and inaccurate results, like the sample results shown below. The ground-truth keypoints are in red, while the net's output is in blue. The inaccurate outputs are likely due to the positioning of the faces.
+				</p>
+				<figcaption align="middle">More accurate points.</figcaption>
+				<div class="two">
+						<section id="two">
+								<img src="images/1/g1.png" height="300px"/>
+						</section>
+						<section id="two">
+								<img src="images/1/g2.png"height="300px"/>
+						</section>
+				</div>
+				<figcaption align="middle">More inaccurate points.</figcaption>
+				<div class="two">
+						<section id="two">
+								<img src="images/1/b1.png" height="300px"/>
+						</section>
+						<section id="two">
+								<img src="images/1/b2.png"height="300px"/>
+						</section>
+				</div>
+				<div id="split"></div>
+				<div id="circle"></div>
+				<div id="split"></div>
+				<h2>Part 2: Full Facial Keypoints Detection</h2>
+				<p>
+					Instead of training the network on just one keypoint, I tried to automate full facial keypoint detection. Since we have limited data but more desired outputs, I implemented data augmentation to give the net more to train on. My data augmentation included random shift, random rotate, random crop, and color jitter.
+				</p>
+				<figcaption align="middle">Sample images from dataloader, without transformations.</figcaption>
+				<div class="two">
+						<section id="two">
+								<img src="images/2/hi1.png" height="300px"/>
+						</section>
+						<section id="two">
+								<img src="images/2/hi2.png"height="300px"/>
+						</section>
+				</div>
+				<figcaption align="middle">Sample images from dataloader, with transformations.</figcaption>
+				<div class="two">
+						<section id="two">
+								<img src="images/2/bye1.png" height="300px"/>
+						</section>
+						<section id="two">
+								<img src="images/2/bye2.png"height="300px"/>
+						</section>
+				</div>
+				<p>
+					Because I included data augmentation, I wrote a new dataloader that would concatenate multiple datasets to feed my model. My neural network had the following hyperparameters outlined below.
+				</p>
+				<section align="middle">
+					<img src="images/2/nn.png" width="600px" />
+				</section>
+				<p>
+					The graph below shows the training loss and validation loss for each epoch. The training loss is in red, and the validation loss is in blue.
+				</p>
+				<section align="middle">
+					<img src="images/2/g.png" width="700px" />
+				</section>
+				<p>
+					Once again, I trained the network using torch.optim.Adam. I experimented with the architecture and found that smaller and simpler networks yielded better outputs. I also experimented with the learning rate, and found that a slightly lower learning rate improved my model by discouraging overfitting. Loss decreased more slowly due to the lower learning rate, so I ran training for 50 epochs. After training, I ran the test images and keypoints thorugh the net. Some sample results are shown below. The ground-truth keypoints are in red, while the net's output is in blue.
+				</p>
+				<figcaption align="middle">More accurate points.</figcaption>
+				<div class="two">
+						<section id="two">
+								<img src="images/2/t1/g1.png" height="300px"/>
+						</section>
+						<section id="two">
+								<img src="images/2/t1/g2.png"height="300px"/>
+						</section>
+				</div>
+				<figcaption align="middle">More inaccurate points.</figcaption>
+				<div class="two">
+						<section id="two">
+								<img src="images/2/t1/b1.png" height="300px"/>
+						</section>
+						<section id="two">
+								<img src="images/2/t1/b2.png"height="300px"/>
+						</section>
+				</div>
+				<p>
+					The inaccurate outputs of the left photo is likely because we did not train enough faces similar to this face's position. The output keypoints are arranged as if the face is straight on, instead of slightly turned to the side. For the right photo, the open mouth and turtleneck create misleading edges that the network is likely misinterpreting. The output points run along the neckline instead of the chin, and through the mouth instead of on the nose. Given more time and disk space, I could have improved the accuracy of the model by running it for more epochs and spending more time toying with the architecture, or building off of an established, pre-trained model.
+				</p>
+				<p>
+					The learned filters for each layer are shown below.
+				</p>
+
+				<div align="middle">
+								<img src="images/2/0.png" width="600px"/>
+							<div class="d"></div>
+								<img src="images/2/1.png" width="600px"/>
+							<div class="d"></div>
+								<img src="images/2/2.png"width="500px"/>
+							<div class="d"></div>
+								<img src="images/2/3.png"height="350px"/>
+							<div class="d"></div>
+								<img src="images/2/4.png"height="350px"/>
+				</div>
+				<div class="d"></div>
+				<div id="split"></div>
+				<div id="circle"></div>
+				<div id="split"></div>
+
+				<h2>Part 3: Train with Larger Dataset</h2>
+				<p>
+					In this part, I learned to train a neural network on an even larger dataset. I used the ibug face in the wild dataset which contains 6666 images. Each image has 68 annnotated facial keypoints. They are all of different sizes, but include the bounding box for the facial keypoints. When loading the data, I isolated the area of the image with the face using the bounding box and reshaped each image to size (224, 224). Then, I modified the resnet18 network so that it would take in the batch size, 64, and have 68*2 outputs. I used a learning rate of 1e-3 and trained for 5 epochs on 5 different augmented datasets and the original dataset.
+				</p>
+				<p>
+					The graph below shows the training loss and validation loss for each epoch. The training loss is in red, and the validation loss is in blue.
+				</p>
+				<section align="middle">
+					<img src="images/2/g.png" width="700px" />
+				</section>
+				<p>
+		</div>
+
+	</body>
+</html>
