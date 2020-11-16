@@ -80,7 +80,6 @@
 						</section>
 				</div>
 				<div id="split"></div>
-				<div id="circle"></div>
 				<div id="split"></div>
 				<h2>Part 2: Full Facial Keypoints Detection</h2>
 				<p>
@@ -157,13 +156,29 @@
 				</div>
 				<div class="d"></div>
 				<div id="split"></div>
-				<div id="circle"></div>
+				<!-- <div id="circle"></div> -->
 				<div id="split"></div>
 
 				<h2>Part 3: Train with Larger Dataset</h2>
 				<p>
-					In this part, I learned to train a neural network on an even larger dataset. I used the ibug face in the wild dataset which contains 6666 images. Each image has 68 annnotated facial keypoints. They are all of different sizes, but include the bounding box for the facial keypoints. When loading the data, I isolated the area of the image with the face using the bounding box and reshaped each image to size (224, 224). Then, I modified the resnet18 network so that it would take in the batch size, 64, and have 68*2 outputs. I used a learning rate of 1e-3 and trained for 5 epochs on 5 different augmented datasets and the original dataset.
+					In this part, I learned to train a neural network on an even larger dataset. I used the ibug face in the wild dataset which contains 6666 images. Each image has 68 annnotated facial keypoints. They are all of different sizes, but include the bounding box for the facial keypoints. When loading the data, I isolated the area of the image with the face using the bounding box and reshaped each image to size (224, 224). Then, I modified the resnet18 network so that it would take in the batch size, 64, and have 68*2 outputs. I used a learning rate of 1e-3 and trained for 5 epochs on 5 different augmented datasets and the original dataset. The architecture for the resnet is displayed below.
 				</p>
+				<div class="two">
+						<section id="two">
+								<img src="images/3/resnet1.png" height="500px"/>
+						</section>
+						<section id="two">
+								<img src="images/3/resnet2.png"height="500px"/>
+						</section>
+				</div>
+				<p>
+					I ran the test images through the trained net and visualized some images to see how accurate the keypoint detection was. Overall, I could improve training by changing the default parameters on the network, or by adding more data augmentation through blurring, noise, shearing, etc. However, here are three images and keypoints output from the network that I thought were fairly accurate.
+				</p>
+				<div align="middle">
+								<img src="images/3/1.png" height="300px"/>
+								<img src="images/3/2.png" height="300px"/>
+								<img src="images/3/3.png"height="300px"/>
+				</div>
 				<p>
 					The graph below shows the training loss and validation loss for each epoch. The training loss is in red, and the validation loss is in blue.
 				</p>
